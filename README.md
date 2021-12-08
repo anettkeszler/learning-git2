@@ -1,4 +1,4 @@
-# git-tutorial
+# Git and GitHub tutorial
 
 ### Git
 Git is a version control system, that allows one or more people to work on the same code
@@ -156,6 +156,130 @@ git push -u origin main --> it will fail first
 - Follow the instructions
 - Add your generated SSH key to your GitHub account
 - now you are able to push from local to remote
+
+
+### Branches
+- main = master branch
+- a branch represents an independent line of development
+- check the branches in your local machine
+```aidl
+git branch
+```
+- check the branches in the remote server
+```aidl
+git branch -r
+```
+- check all branches:
+```aidl
+git branch -a
+```
+- create a new branch:
+```aidl
+git branch feature-a
+```
+- switch brances:
+```aidl
+git checkout feature-a
+```
+- switch to the previous branch:
+```aidl
+git checkout -
+```
+- if you go back to main, and check logs (git log), you cannot see the last committed new file, because that is on another branch (feature-a)
+- this feature branch doesn't exist in GitHub yet
+- push the changes on the local feature branch to the remote feature branch:
+```aidl
+git push
+```
+fatal: The current branch feature-a has no upstream branch.
+To push the current branch and set the remote as upstream, use
+
+    git push --set-upstream origin feature-a
+
+--> this is because feature-a branch haven't exist on remote yet.
+
+- create a new branch and checkout to that branch in 1 step
+```aidl
+git checkout -b feature-b
+```
+- delete a branch:
+```aidl
+git checkout main
+git branch -d feature-b
+```
+
+### Merging and Pull Requests
+- when you want to push a feature branch to main, best practice is to do it through a PR, as it can be reviewed before merging
+- you could merge it through bash:
+```aidl
+git checkout main
+git merge feature-a
+```
+- create pull request from feature-a to main in GitHub, merge it
+- go back to terminal
+```aidl
+git log
+```
+- you cannot see the changes on main, because first you need to pull it
+- if you delete the feature branch in GitHub after merging, it is still exists on your local machine, you need to delete it
+
+### Git Workflow
+- when you start to work on a new feature, the first thing you do is to pull the latest changes from master to your local machine 
+- from that point you create a new branch (git checkout -b feature-a), start working on your feature, make commits
+- it is advisable to rebase your changes against master, especially if you have been working on the feature for days, as you know, master will move on.
+- so what you want to do is to bring the latest changes from master into your local machine and when you rebase you might not have conflicts
+- if you have conflicts you have to resolve all of your conflicts
+- if you have 10 commits, then you have to resolve the conflicts for each commit. So what is advisable to do is to squash all of your local commits first, and rebase master
+- you squash your commits, so on your local branch you have one single squashed commit, and when you rebase, you need to remove this commit, this action is called stash, this means that you put your commit aside, than you bring all the changes from master with rebase, and then you put your commit back on the top of it
+- then you push to remote and raise a pull request
+- if this is approved, then you merge your commit into master
+
+### Dealing with conflicts
+- merge conflict occur when 2 developers work on the same line of the file
+- you need to pull the changes first from the same file then resolve the conflict
+
+### Rebase
+- you have a feature branch, and you are working on that branch
+- during that time, main branch may have multiple commits, main branch has moved on, and you don't have that commits from main
+- what rebase does: it takes all of your new commits away, it will bring all the commits from master into your branch, than it will apply your changes on top of it.
+
+```aidl
+git pull --rebase
+git pull -r origin main // remote main/master/master-staging
+```
+- open intellij or open the file in vim
+- resolve first merge conflict, then:
+```aidl
+git add .
+git rebase --continue
+```
+- open intellij or the file in vim again, and resolve the second commit, than:
+```aidl
+git add .
+git rebase --continue
+```
+- continue it until all conflicts will be resolved, than:
+```aidl
+git push
+```
+It will give you an error message:
+```aidl
+To github.com:anettkeszler/learning-git2
+ ! [rejected]        feature-xyz -> feature-xyz (non-fast-forward)
+error: failed to push some refs to 'git@github.com:anettkeszler/learning-git2'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+```
+```aidl
+git push -f
+```
+- create pull request from feature branch to main
+
+### Squash commits
+- you are working on your feature branch, and you have 10 commits.
+- before you rebase, it is better to squash that 10 commits into 1 commit, than you do not need to resolve 10 commits' merge conflicts, only 1.
 
 
 
