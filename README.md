@@ -1,5 +1,8 @@
 # Git and GitHub tutorial
 
+### Useful link
+https://github.com/git-guides/
+
 ### Git
 Git is a version control system, that allows one or more people to work on the same code
 
